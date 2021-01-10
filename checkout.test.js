@@ -3,11 +3,11 @@ const {
     banana,
     kiwi,
     mango,
-    items,
     basket,
     scanItem,
     addToBasket,
     totalBasket,
+    showBasket,
     removeItem
 } = require("./checkout.js");
 
@@ -26,8 +26,19 @@ describe("check that self-checkout process works", () => {
         });
     });
 
-    it("adds an item to the basket, returns the name og that item and checks that the basket contains the correct number of items", () => {
-        expect(addToBasket(banana)).toBe("Added one banana to your basket");
+    it("returns an empty basket message showBasket is called on an empty basket", () => {
+        expect(showBasket()).toBe("Your basket is empty");
+    });
+
+    it("adds an item to the basket and returns a message confirming that item has been removed together with update of total basket price.", () => {
+        expect(addToBasket(banana)).toBe("Added one banana. Basket total: £6");
+    });
+
+    it("returns a list of items in the basket.", () => {
+        expect(showBasket()).toBe("Items in your basket: banana ");
+    });
+
+    it("checks that the basket contains the correct number of items", () => {
         expect(basket.length).toBe(1);
     });
 
@@ -41,12 +52,20 @@ describe("check that self-checkout process works", () => {
         expect(totalBasket()).toBe(5+6+25);
     });
 
-    it("checks that an error message is returned if the item is not actually in the basket", () => {
-        expect(removeItem(mango)).toBe("You don't have that item in your basket");
+    it("returns a list of items in the basket.", () => {
+        expect(showBasket()).toBe("Items in your basket: banana kiwi apple ");
     });
 
-    it("removes an item from the basket, returns a message confirming the item has been removed", () => {
-        expect(removeItem(kiwi)).toBe("Removed one kiwi from your basket");
+    it("checks that an error message is returned if the item is not actually in the basket", () => {
+        expect(removeItem(mango)).toBe("There's no mango in your basket");
+    });
+
+    it("removes an item from the basket and returns a message confirming the item has been removed together with update of total basket price.", () => {
+        expect(removeItem(kiwi)).toBe("Removed one kiwi. Basket total £11");
+    });
+
+    it("returns a list of items in the basket.", () => {
+        expect(showBasket()).toBe("Items in your basket: banana apple ");
     });
 
     it("checks that the basket contains the correct number of items", () => {
